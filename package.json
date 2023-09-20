@@ -1,0 +1,73 @@
+{
+  "name": "petstore",
+  "version": "1.0.0",
+  "description": "store for pets",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "vite",
+    "typescript",
+    "jest",
+    "tailwind",
+    "template",
+    "starter",
+    "css-modules",
+    "eslint",
+    "prettier",
+    "husky",
+    "commit-lint"
+  ],
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not IE 11"
+  ],
+  "engines": {
+    "node": ">=14",
+    "yarn": ">=1.22.5"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "jest",
+    "postinstall": "husky install"
+  },
+  "dependencies": {
+    "@heroicons/react": "2.0.18",
+    "@juxt/pass": "^1.1.9",
+    "@tanstack/react-query": "^4.35.3",
+    "fets": "^0.4.13",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "17.4.2",
+    "@commitlint/config-conventional": "17.4.2",
+    "@tailwindcss/forms": "0.5.3",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "13.4.0",
+    "@types/jest": "29.2.5",
+    "@types/node": "20.6.3",
+    "@types/react": "18.2.22",
+    "@typescript-eslint/eslint-plugin": "6.7.2",
+    "@typescript-eslint/parser": "6.7.2",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "autoprefixer": "10.4.15",
+    "eslint": "8.49.0",
+    "eslint-plugin-import": "2.28.1",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "husky": "8.0.3",
+    "identity-obj-proxy": "3.0.0",
+    "jest": "29.3.1",
+    "jest-environment-jsdom": "29.3.1",
+    "lint-staged": "14.0.1",
+    "postcss": "8.4.30",
+    "prettier": "3.0.3",
+    "tailwindcss": "3.3.3",
+    "ts-jest": "29.1.1",
+    "typescript": "^5.2.2",
+    "vite": "4.4.9",
+    "vite-preset-react": "2.3.0"
+  }
+}
