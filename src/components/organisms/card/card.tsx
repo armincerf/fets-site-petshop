@@ -1,12 +1,42 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "./card.module.css";
-import { Pet } from "src/fetsClient";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { Pet, client } from "../../../fetsClient";
+
+async function deletePet(pet: Pet) {
+  if (!pet.id) {
+    throw new Error("Pet id is required");
+  }
+  const response = await client["/pet/{petId}"].delete({
+    params: { petId: pet.id },
+  });
+  if (response.status !== 204) {
+    throw new Error("Failed to delete pet");
+  }
+}
 
 function Card(pet: Pet) {
   const { name, photoUrls, category } = pet;
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useMutation({
+    mutationKey: ["deletePet"],
+    mutationFn: deletePet,
+    onError: (error) => {
+      console.error(error);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["pets"]);
+    },
+  });
   return (
     <div className={styles.card}>
       <div className={styles.content}>
-        <h3 className={styles.title}>{name}</h3>
+        <div className="flex justify-between">
+          <h3 className={styles.title}>{name}</h3>
+          <button className="p-2" onClick={() => mutateAsync(pet)}>
+            <TrashIcon className="w-6 text-red-500" />
+          </button>
+        </div>
         {category && (
           <div className="flex items-center text-white gap-2">
             <span>
@@ -22,7 +52,7 @@ function Card(pet: Pet) {
               key={url}
               src={url}
               alt={name}
-              className={styles.image}
+              className="w-full h-64 object-cover rounded-md"
               loading="lazy"
             />
           ))}

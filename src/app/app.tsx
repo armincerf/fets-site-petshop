@@ -5,8 +5,9 @@ import Button from "components/atoms/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import styles from "./app.module.css";
-import { client } from "../fetsClient";
-import { useState } from "react";
+import { Pet, client } from "../fetsClient";
+import { useId, useState } from "react";
+import { GiphyFetch } from "@giphy/js-fetch-api";
 
 async function fetchPet(id: number) {
   const response = await client["/pet/{petId}"].get({ params: { petId: id } });
@@ -26,15 +27,18 @@ async function fetchPets() {
   return pets;
 }
 
-async function addPet({ name }: { name: string }) {
-  if (!name) {
+const giphyFetch = new GiphyFetch("sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh");
+
+async function addPet(pet: Pet) {
+  if (!pet.name) {
     throw new Error("Name is required");
   }
+  const image = await giphyFetch.search(pet.name, { limit: 1 });
   const response = await client["/pet"].post({
     json: {
-      id: "123",
-      name,
-      photoUrls: [],
+      ...pet,
+      photoUrls: [image.data[0].images.original.url],
+      id: Math.floor(Math.random() * 1000000).toString(),
     },
   });
   if (response.status !== 200) {
@@ -59,16 +63,10 @@ const App = (): JSX.Element => {
     mutationFn: addPet,
   });
 
-  const { data: pet } = useQuery({
-    queryKey: ["pet", 10],
-    queryFn: () => fetchPet(10),
-  });
-
   const [petName, setPetName] = useState("");
+  const [category, setCategory] = useState("Dogs");
+  const categories = ["Dogs", "Cats", "Birds", "Fish", "Reptiles"];
 
-  if (!pet) {
-    return <div>Loading...</div>;
-  }
   return (
     <main className={styles.main}>
       <header className={styles.header}>
@@ -76,7 +74,10 @@ const App = (): JSX.Element => {
         <p className={styles.headerDescription}>
           Do you like pets? Well buy them here! Current offers include:{" "}
           {topPets?.map((pet) => (
-            <code key={pet.name} className={styles.headerDescriptionCode}>
+            <code
+              key={pet.id || pet.name + pet.photoUrls}
+              className={styles.headerDescriptionCode}
+            >
               {pet.name}
             </code>
           ))}
@@ -102,11 +103,30 @@ const App = (): JSX.Element => {
             value={petName}
             onChange={(e) => setPetName(e.target.value)}
           />
+          <select
+            placeholder="Type of Pet"
+            className="border-2 border-gray-500 rounded-md bg-gray-700 text-white"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
 
           <Button
             disabled={submitting}
             onClick={async () => {
-              await mutateAsync({ name: petName });
+              await mutateAsync({
+                name: petName,
+                category: {
+                  name: category,
+                  id: category,
+                },
+                photoUrls: [],
+              });
               queryClient.invalidateQueries(["pets"]);
               setPetName("");
             }}
@@ -124,15 +144,17 @@ const App = (): JSX.Element => {
         </div>
       </section>
       <section className={styles.features}>
-        {topPets?.map((props, index) => (
-          <div
-            key={props.name}
-            className={styles.cardWrapper}
-            style={{ animationDelay: `${index * 0.1 + 0.1}s` }}
-          >
-            <Card {...props} />
-          </div>
-        ))}
+        {topPets
+          ?.filter((pet) => pet.name && pet?.status !== "unavailable")
+          .map((props, index) => (
+            <div
+              key={props.name}
+              className={styles.cardWrapper}
+              style={{ animationDelay: `${index * 0.1 + 0.1}s` }}
+            >
+              <Card {...props} />
+            </div>
+          ))}
       </section>
       <footer className={styles.footer}>Powered by Site and XTDB</footer>
     </main>

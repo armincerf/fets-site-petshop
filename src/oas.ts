@@ -354,6 +354,9 @@
           },
         ],
         responses: {
+          "204": {
+            description: "Pet deleted",
+          },
           "400": {
             description: "Invalid pet value",
           },
@@ -372,8 +375,7 @@
           },
           {
             schema: {
-              type: "integer",
-              format: "int64",
+              type: "string",
             },
             name: "petId",
             required: true,
@@ -522,7 +524,7 @@
             schema: {
               type: "string",
               default: "available",
-              enum: ["available", "pending", "sold"],
+              enum: ["unavailable", "available", "pending", "sold"],
             },
             name: "status",
             explode: true,
@@ -1133,7 +1135,7 @@
           status: {
             type: "string",
             description: "pet status in the store",
-            enum: ["available", "pending", "sold"],
+            enum: ["unavailable", "available", "pending", "sold"],
           },
           category: {
             $ref: "#/components/schemas/Category",
