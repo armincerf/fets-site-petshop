@@ -1,8 +1,8 @@
-import { createClient, OASModel, type NormalizeOAS } from "fets";
-import openAPIDoc from "./oas";
+import { createClient, type OASModel, type NormalizeOAS } from 'fets'
+import type openAPIDoc from './oas'
 
-export type Pet = OASModel<NormalizeOAS<typeof openAPIDoc>, "Pet">;
+export type Pet = OASModel<NormalizeOAS<typeof openAPIDoc>, 'Pet'>
 
 export const client = createClient<NormalizeOAS<typeof openAPIDoc>>({
-  endpoint: "https://data.home.juxt.site/petstore",
-});
+  endpoint: 'https://data.home.juxt.site/petstore'
+})

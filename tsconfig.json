@@ -4,7 +4,7 @@
     "target": "ES2022",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
@@ -24,5 +24,14 @@
       "hooks/*": ["src/hooks/*"]
     }
   },
-  "include": ["./src"]
+  "include": [
+    "./src",
+    ".eslintrc.js",
+    "prettier.config.js",
+    "tailwind.config.js",
+    "./public/oauth-service-worker.js",
+    "postcss.config.js",
+    "lint-staged.config.js",
+    "commitlint.config.js"
+  ]
 }

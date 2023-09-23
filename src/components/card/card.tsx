@@ -1,39 +1,44 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import styles from "./card.module.css";
-import { TrashIcon } from "@heroicons/react/24/outline";
-import { Pet, client } from "../../../fetsClient";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import styles from './card.module.css'
+import { TrashIcon } from '@heroicons/react/24/outline'
+import { type Pet, client } from '../../fetsClient'
 
 async function deletePet(pet: Pet) {
   if (!pet.id) {
-    throw new Error("Pet id is required");
+    throw new Error('Pet id is required')
   }
-  const response = await client["/pet/{petId}"].delete({
-    params: { petId: pet.id },
-  });
+  const response = await client['/pet/{petId}'].delete({
+    params: { petId: pet.id }
+  })
   if (response.status !== 204) {
-    throw new Error("Failed to delete pet");
+    throw new Error('Failed to delete pet')
   }
 }
 
 function Card(pet: Pet) {
-  const { name, photoUrls, category } = pet;
-  const queryClient = useQueryClient();
-  const { mutateAsync } = useMutation({
-    mutationKey: ["deletePet"],
+  const { name, photoUrls, category } = pet
+  const queryClient = useQueryClient()
+  const { mutate } = useMutation({
+    mutationKey: ['deletePet'],
     mutationFn: deletePet,
     onError: (error) => {
-      console.error(error);
+      console.error(error)
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["pets"]);
-    },
-  });
+      void queryClient.invalidateQueries(['pets'])
+    }
+  })
   return (
     <div className={styles.card}>
       <div className={styles.content}>
         <div className="flex justify-between">
           <h3 className={styles.title}>{name}</h3>
-          <button className="p-2" onClick={() => mutateAsync(pet)}>
+          <button
+            className="p-2"
+            onClick={() => {
+              mutate(pet)
+            }}
+          >
             <TrashIcon className="w-6 text-red-500" />
           </button>
         </div>
@@ -46,7 +51,7 @@ function Card(pet: Pet) {
           </div>
         )}
         {photoUrls
-          ?.filter((url) => !!url && url.includes("http"))
+          ?.filter((url) => !!url && url.includes('http'))
           .map((url) => (
             <img
               key={url}
@@ -68,7 +73,7 @@ function Card(pet: Pet) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Card;
+export default Card

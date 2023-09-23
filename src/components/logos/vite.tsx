@@ -1,4 +1,4 @@
-import { LogosProps } from "components/atoms/logos/index";
+import { type LogosProps } from 'components/logos/index'
 
 const Vite = (props: LogosProps): JSX.Element => {
   return (
@@ -8,25 +8,25 @@ const Vite = (props: LogosProps): JSX.Element => {
       viewBox="0 0 512 512"
       {...props}
     >
-      <style>{".st5{fill:#a18fa1}.st12{fill:#fff}"}</style>
+      <style>{'.st5{fill:#a18fa1}.st12{fill:#fff}'}</style>
       <path
         id="Layer_9"
         d="M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256z"
         style={{
-          fill: "#ffd66c",
+          fill: '#ffd66c'
         }}
       />
       <g id="Layer_7">
         <path
           d="m122.9 250 15.7 116.8c0 10 8.1 18.2 18.1 18.2H352c10 0 18.1-8.1 18.1-18.2l14-116.8H122.9z"
           style={{
-            fill: "#706470",
+            fill: '#706470'
           }}
         />
         <path
           d="M245.3 120.9c-24.7 39-49.5 78.2-74.2 117.1-4.3 6.8 1.3 15.9 9 15.9H327c7.8 0 13.3-9.2 9-15.9-24.2-39-48.5-78-72.7-117-7.1-11.4-25.2-1-18.1 10.5 24.2 39 48.5 78.1 72.7 117.1 3-5.2 6-10.6 9-15.6H180c3 5 6 10.3 9 15.6 24.7-39 49.5-78 74.2-117 7.4-11.5-10.7-22-17.9-10.7z"
           style={{
-            fill: "#4b1e4c",
+            fill: '#4b1e4c'
           }}
         />
         <circle cx={191} cy={223.5} r={15.5} className="st5" />
@@ -34,7 +34,7 @@ const Vite = (props: LogosProps): JSX.Element => {
         <path
           d="M280.5 278.9c-4.3 0-8.5 2.9-8.5 8.4v71.9c0 5.5 4.2 8.4 8.5 8.4s8.5-2.9 8.5-8.4v-71.9c0-5.5-4.2-8.4-8.5-8.4zm64.7 2.5c-1.7-1.9-4.3-3.1-6.7-3.1-4.5 0-8 3.3-8.6 8.3l-9.1 72.3c-.3 2.1.4 4.1 1.9 5.8 1.7 1.9 4.3 3.1 6.7 3.1 4.5 0 8-3.3 8.6-8.3l9.1-72.3c.3-2.1-.4-4.2-1.9-5.8zm-168 5.1c-.6-5-4.1-8.3-8.6-8.3-2.4 0-5 1.2-6.7 3.1-1.5 1.7-2.2 3.8-1.9 5.8l9.1 72.3c.6 5 4.1 8.3 8.6 8.3 2.4 0 5-1.2 6.7-3.1 1.5-1.7 2.2-3.8 1.9-5.8l-9.1-72.3zm49.3-7.6c-4.3 0-8.5 2.9-8.5 8.4v71.9c0 5.5 4.2 8.4 8.5 8.4s8.5-2.9 8.5-8.4v-71.9c0-5.5-4.2-8.4-8.5-8.4z"
           style={{
-            fill: "#614f61",
+            fill: '#614f61'
           }}
         />
         <path
@@ -62,7 +62,7 @@ const Vite = (props: LogosProps): JSX.Element => {
         />
       </g>
     </svg>
-  );
-};
+  )
+}
 
-export default Vite;
+export default Vite
