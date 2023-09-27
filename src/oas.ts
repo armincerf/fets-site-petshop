@@ -1117,6 +1117,10 @@
             },
             type: 'array'
           },
+          dob: {
+            type: 'string',
+            format: 'date-time'
+          },
           tags: {
             xml: {
               wrapped: true
@@ -1147,7 +1151,7 @@
         xml: {
           name: 'pet'
         },
-        required: ['name', 'photoUrls'],
+        required: ['name'],
         type: 'object'
       },
       ApiResponse: {

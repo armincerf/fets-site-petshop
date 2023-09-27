@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import styles from './card.module.css'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { type Pet, client } from '../../fetsClient'
+import { refetchPets } from '../../utils'
 
 async function deletePet(pet: Pet) {
   if (!pet.id) {
@@ -25,7 +26,7 @@ function Card(pet: Pet) {
       console.error(error)
     },
     onSettled: () => {
-      void queryClient.invalidateQueries(['pets'])
+      refetchPets(queryClient)
     }
   })
   return (
@@ -50,17 +51,18 @@ function Card(pet: Pet) {
             <span key={category.id}>{category.name}</span>
           </div>
         )}
-        {photoUrls
-          ?.filter((url) => !!url && url.includes('http'))
-          .map((url) => (
-            <img
-              key={url}
-              src={url}
-              alt={name}
-              className="w-full h-64 object-cover rounded-md"
-              loading="lazy"
-            />
-          ))}
+        {typeof photoUrls === 'object' &&
+          photoUrls
+            ?.filter((url) => !!url && url.includes('http'))
+            .map((url) => (
+              <img
+                key={url}
+                src={url}
+                alt={name}
+                className="w-full h-64 object-cover rounded-md"
+                loading="lazy"
+              />
+            ))}
         <div className={styles.callToActionContainer}>
           <a
             href={`/pet/${pet.id}`}

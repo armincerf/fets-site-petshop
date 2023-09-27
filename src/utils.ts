@@ -1,3 +1,4 @@
+import { type QueryClient } from '@tanstack/react-query'
 import { atom } from 'jotai'
 
 export const atomWithLocalStorage = (key: string, initialValue: unknown) => {
@@ -19,4 +20,8 @@ export const atomWithLocalStorage = (key: string, initialValue: unknown) => {
     }
   )
   return derivedAtom
+}
+
+export function refetchPets(queryClient: QueryClient) {
+  void queryClient.refetchQueries({ queryKey: ['pets'] })
 }

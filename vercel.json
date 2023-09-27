@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/photo-api/:match*",
+      "destination": "https://photos.juxt.site/:match*"
+    }
+  ],
+  "devCommand": "bun dev"
+}

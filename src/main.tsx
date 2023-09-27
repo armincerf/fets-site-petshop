@@ -5,6 +5,7 @@ import { StrictMode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { clearToken } from '@juxt/pass'
 import { resource_server } from './constants'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const container = document.getElementById('root')
 
@@ -25,6 +26,7 @@ root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </StrictMode>
 )

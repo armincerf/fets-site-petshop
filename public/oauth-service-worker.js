@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 // to immediately install the service worker
 addEventListener('install', (event) => {
   // install on all site tabs without waiting for them to be opened

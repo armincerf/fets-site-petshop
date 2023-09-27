@@ -2,11 +2,80 @@ import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { client } from '../fetsClient'
 import { registerOAuth2Worker, authorize, clearToken } from '@juxt/pass'
-import { app_server, authorization_server, resource_server } from '../constants'
+import {
+  app_server,
+  authorization_server,
+  photoPrismPreviewTokenKey,
+  photoPrismTokenKey,
+  resource_server
+} from '../constants'
 import { useAtom } from 'jotai'
 import { atomWithLocalStorage } from '../utils'
+import { type PhotoPrismLoginResponse } from '../photoprism'
 
 const loggedInAtom = atomWithLocalStorage('loggedIn', false)
+
+async function photoPrismLogin() {
+  const existingApiToken = localStorage.getItem(photoPrismTokenKey)
+  const existingPreviewToken = localStorage.getItem(photoPrismPreviewTokenKey)
+  if (existingApiToken && existingPreviewToken) {
+    return {
+      apiToken: existingApiToken,
+      previewToken: existingPreviewToken
+    }
+  }
+  const res: PhotoPrismLoginResponse = await fetch('photo-api/v1/session', {
+    headers: {
+      accept: 'application/json, text/plain, */*',
+      'accept-language': 'en-GB',
+      'content-type': 'application/json'
+    },
+    body: `{username:"admin",password:"${
+      import.meta.env.PHOTOPRISM_PASSWORD
+    }"}`,
+    method: 'POST'
+  })
+    .then(async (res) => await res.json())
+    .catch((error) => {
+      console.error('error logging in to photoprism', error)
+      return {
+        apiToken: null,
+        previewToken: null
+      }
+    })
+
+  if (res) {
+    return {
+      apiToken: res.id,
+      previewToken: res.config.previewToken
+    }
+  }
+}
+
+// preload photoprism token
+photoPrismLogin()
+  .then((res) => {
+    if (!res) {
+      console.error('no data from photoprism login')
+      return
+    }
+    if (res.apiToken) {
+      localStorage.setItem(photoPrismTokenKey, res.apiToken)
+    }
+    if (res.previewToken) {
+      localStorage.setItem(photoPrismPreviewTokenKey, res.previewToken)
+    }
+  })
+  .catch((error) => {
+    console.error('error logging in to photoprism', error)
+  })
+
+export function usePhotoPrismLogin() {
+  return useQuery({
+    queryKey: ['photoprism-login'],
+    queryFn: async () => await photoPrismLogin()
+  })
+}
 
 registerOAuth2Worker().catch((error) => {
   console.error('error registering pass SW', error)

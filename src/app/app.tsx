@@ -2,21 +2,25 @@ import Logos from 'components/logos'
 import Card from 'components/card'
 import { CubeTransparentIcon } from '@heroicons/react/24/outline'
 import Button from 'components/button'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 import styles from './app.module.css'
-import { type Pet, client } from '../fetsClient'
 import { useState } from 'react'
-import { GiphyFetch } from '@giphy/js-fetch-api'
 import { useAddPet, usePets } from 'hooks/data'
 import { authorizeCallback, useUser } from 'hooks/auth'
+import { refetchPets } from '../utils'
 
 function App() {
   const queryClient = useQueryClient()
   const { data: topPets } = usePets()
   const { loggedIn } = useUser()
 
-  const { mutate, isLoading: submitting, isError, error } = useAddPet()
+  const { mutate, isError, error } = useAddPet()
+
+  const [petName, setPetName] = useState('')
+  const [petPhoto, setPetPhoto] = useState('')
+  const [category, setCategory] = useState('Dogs')
+  const categories = ['Dogs', 'Cats', 'Birds', 'Fish', 'Reptiles']
 
   function handleAddPet() {
     mutate({
@@ -25,14 +29,13 @@ function App() {
         name: category,
         id: category
       },
-      photoUrls: []
+      photoUrls: petPhoto ? [petPhoto] : undefined
     })
-    void queryClient.invalidateQueries(['pets'])
+    refetchPets(queryClient)
     setPetName('')
+    setPetPhoto('')
+    setCategory('Dogs')
   }
-  const [petName, setPetName] = useState('')
-  const [category, setCategory] = useState('Dogs')
-  const categories = ['Dogs', 'Cats', 'Birds', 'Fish', 'Reptiles']
 
   return (
     <main className={styles.main}>
@@ -62,16 +65,8 @@ function App() {
           <Logos.Vite className={styles.viteLogo} />
         </div>
       </header>
-
       {loggedIn ? (
         <>
-          <section className={styles.copy}>
-            <div className={styles.copyInner}>
-              <a href="/list-pets">
-                <Button>See all Pets</Button>
-              </a>
-            </div>
-          </section>
           <section className={styles.copy}>
             <div className="flex flex-col w-fit gap-2">
               <input
@@ -97,15 +92,24 @@ function App() {
                   </option>
                 ))}
               </select>
+              <input
+                placeholder="Pet Photo URL"
+                className="border-2 border-gray-500 rounded-md bg-gray-700 text-white"
+                type="text"
+                value={petPhoto}
+                onChange={(e) => {
+                  setPetPhoto(e.target.value)
+                }}
+              />
 
-              <Button disabled={submitting} onClick={handleAddPet}>
+              <Button onClick={handleAddPet}>
                 <p>Add a new pet</p>
               </Button>
               {isError && (
                 <div className="flex items-center gap-2">
                   <CubeTransparentIcon className="w-6 h-6 text-red-500" />
                   <span className="text-red-500">
-                    Failed to add pet - {(error as Error)?.message}
+                    Failed to add pet - {error?.message}
                   </span>
                 </div>
               )}
